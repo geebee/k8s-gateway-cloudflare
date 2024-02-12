@@ -52,7 +52,7 @@ func (r *GatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 		log.Error(err, "Failed to get GatewayClass")
 		return ctrl.Result{}, err
 	}
-	if gatewayClass.Spec.ControllerName != "github.com/pl4nty/cloudflare-kubernetes-gateway" {
+	if gatewayClass.Spec.ControllerName != "github.com/geebee/k8s-gateway-cloudflare" {
 		return ctrl.Result{}, nil
 	}
 	gatewayClassFinalizer := "gateway-exists-finalizer.gateway.networking.k8s.io"
@@ -209,7 +209,7 @@ func (r *GatewayReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ct
 			Template: core.PodTemplateSpec{
 				ObjectMeta: v1.ObjectMeta{Labels: labels},
 				Spec: core.PodSpec{Containers: []core.Container{{
-					Name:  "main",
+					Name: "main",
 					// renovate: datasource=docker
 					Image: "cloudflare/cloudflared:2024.2.0",
 					Args:  []string{"tunnel", "--no-autoupdate", "run", "--token", token},

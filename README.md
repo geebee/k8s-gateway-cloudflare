@@ -1,22 +1,23 @@
-# Cloudflare Kubernetes Gateway
+# Kubernetes Gateway API via Cloudflare(d) Tunnels
 
-Manage Kubernetes ingress traffic with Cloudflare Tunnels via the [Gateway API](https://gateway-api.sigs.k8s.io/).
+Manage Kubernetes ingress traffic with Cloudflare(d) Tunnels via the [Gateway API](https://gateway-api.sigs.k8s.io/).
 
 ## Getting Started
 
 1. Install v1 or later of the Gateway API CRDs: `kubectl apply -k github.com/kubernetes-sigs/gateway-api//config/crd?ref=v1.0.0`
-2. Install cloudflare-kubernetes-gateway: `kubectl apply -k github.com/pl4nty/cloudflare-kubernetes-gateway//config/default`
+2. Install cloudflare-kubernetes-gateway: `kubectl apply -k github.com/geebee/k8s-gateway-cloudflare//config/default`
 3. [Find your Cloudflare account ID](https://developers.cloudflare.com/fundamentals/setup/find-account-and-zone-ids/)
 3. [Create a Cloudflare API token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/) with the Account.Cloudflare Tunnel and DNS.Zone permissions
 4. Use them to create a Secret: `kubectl create secret -n cloudflare-gateway generic cloudflare --from-literal=ACCOUNT_ID=your-account-id --from-literal=TOKEN=your-token`
 5. Create a file containing your GatewayClass, then apply it with `kubectl apply -f file.yaml`:
+
 ```yaml
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
   name: cloudflare
 spec:
-  controllerName: github.com/pl4nty/cloudflare-kubernetes-gateway
+  controllerName: github.com/geebee/k8s-gateway-cloudflare
   parametersRef:
     group: ""
     kind: Secret
