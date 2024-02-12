@@ -14,7 +14,7 @@ kubectl apply -k config/samples/
 2. Build and push your image to the location specified by `IMG`:
 
 ```sh
-make docker-build docker-push IMG=<some-registry>/cloudflare-kubernetes-gateway:tag
+make docker-build docker-push IMG=<some-registry>/k8s-gateway-cloudflare:<tag>
 ```
 
 3. Deploy the controller to the cluster with the image specified by `IMG`:
@@ -75,3 +75,4 @@ More information can be found via the [Kubebuilder Documentation](https://book.k
 ## License
 
 MIT. Copyright (c) 2023 Tom Plant
+MIT. Copyright (c) 2024 @geebee

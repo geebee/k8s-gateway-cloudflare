@@ -18,7 +18,7 @@ import (
 
 	gw "sigs.k8s.io/gateway-api/apis/v1"
 
-	"github.com/pl4nty/cloudflare-kubernetes-gateway/internal/controller"
+	"github.com/geebee/k8s-gateway-cloudflare/internal/controller"
 	//+kubebuilder:scaffold:imports
 )
 
