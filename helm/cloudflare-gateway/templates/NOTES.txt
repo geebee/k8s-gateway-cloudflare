@@ -1,0 +1,77 @@
+Cloudflare Gateway Installed.
+
+NOTE: Not 100% of v1 features are implemented. See project README for details.
+
+The Controller Manager has been installed to the: `{{ .Release.Namespace }} namespace.
+
+Before you can create the `GatewayClass` object or any `Gateway` or `HTTPRoute`
+objects, you have to provide the controller with Cloudflare credentials.
+
+1. Find your Cloudflare account ID:
+  https://developers.cloudflare.com/fundamentals/setup/find-account-and-zone-ids/
+2. Create a Cloudflare API token:
+  https://developers.cloudflare.com/fundamentals/api/get-started/create-token/
+
+  Create the token with the following permissions:
+    - "Account.Cloudflare Tunnel"
+    - "DNS.Zone" 
+
+  Token security best practices:
+    - Use a short token duration, forcing you to roll the secret regularly
+    - Restrict the token to a single account
+    - Restrict the token to the smallest number of zones that meets your needs
+
+3. Use them to create a Secret by running
+
+kubectl create secret \
+  -n {{ .Release.Namespace }} generic {{ .Values.cloudflareCredentialsSecretName }} \
+  --from-literal=ACCOUNT_ID=your-account-id \
+  --from-literal=TOKEN=your-token
+
+4. Create a file containing your `GatewayClass`, like below, named `gateway-class.yaml`
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: cloudflare
+spec:
+  controllerName: github.com/geebee/k8s-gateway-cloudflare
+  parametersRef:
+    group: ""
+    kind: Secret
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.cloudflareCredentialsSecretName }}
+
+5. Apply it with `kubectl apply -f gateway-class.yaml`
+
+6. Create Gateways and HTTPRoutes. An example:
+  (see: https://gateway-api.sigs.k8s.io/guides/http-routing for documentation)
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cloudflare-gateway
+  namespace: default
+spec:
+  gatewayClassName: cloudflare
+  listeners:
+  - protocol: HTTP
+    port: 80
+    name: http
+
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: example-route
+  namespace: default
+spec:
+  parentRefs:
+  - name: cloudflare-gateway
+    namespace: default
+  hostnames:
+  - example.com
+  rules:
+  - backendRefs:
+    - name: example-service
+      port: 80

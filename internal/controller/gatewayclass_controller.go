@@ -12,6 +12,8 @@ import (
 	gw "sigs.k8s.io/gateway-api/apis/v1"
 )
 
+const GatewayClassName = "github.com/geebee/k8s-gateway-cloudflare"
+
 // GatewayClassReconciler reconciles a GatewayClass object
 type GatewayClassReconciler struct {
 	client.Client
@@ -76,6 +78,6 @@ func (r *GatewayClassReconciler) Reconcile(ctx context.Context, req ctrl.Request
 // SetupWithManager sets up the controller with the Manager.
 func (r *GatewayClassReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&gw.GatewayClass{Spec: gw.GatewayClassSpec{ControllerName: "github.com/geebee/k8s-gateway-cloudflare"}}).
+		For(&gw.GatewayClass{Spec: gw.GatewayClassSpec{ControllerName: GatewayClassName}}).
 		Complete(r)
 }

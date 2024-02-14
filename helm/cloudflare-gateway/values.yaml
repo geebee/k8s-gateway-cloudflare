@@ -1,0 +1,115 @@
+# Default values for cloudflare-gateway.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+cloudflareCredentialsSecretName: cloudflare-credentials
+
+image:
+  repository: ghcr.io/geebee/k8s-gateway-cloudflare
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+rbac:
+  leaderElection:
+    roleName: cloudflare-leader-election-role
+    roleBindingName: cloudflare-leader-election-rolebinding
+  manager:
+    clusterRoleName: cloudflare-manager-role
+    clusterRoleBindingName: cloudflare-manager-rolebinding
+  metricsReader:
+    clusterRoleName: cloudflare-metrics-reader
+  proxy:
+    image: gcr.io/kubebuilder/kube-rbac-proxy:v0.14.1
+    clusterRoleName: cloudflare-proxy-role
+    clusterRoleBindingName: cloudflare-proxy-clusterrolebinding
+    resources: {}
+    # Left disabled to increase the chances of running in resource
+    # constrained environments. If requests and limits are needed,
+    # remove the line above, and uncomment the block below.
+    # resources:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 128Mi
+    #   requests:
+    #     cpu: 5m
+    #     memory: 64Mi
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: 
+  runAsNonRoot: true
+  runAsUser: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+
+monitoring:
+  enabled: false
+
+resources: {}
+# Left disabled to increase the chances of running in resource
+# constrained environments. If requests and limits are needed,
+# remove the line above, and uncomment the block below.
+# resources:
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 10m
+#     memory: 64Mi
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 8081
+  initialDelaySeconds: 15
+  periodSeconds: 20
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: 8081
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

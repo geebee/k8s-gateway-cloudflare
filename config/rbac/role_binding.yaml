@@ -5,9 +5,9 @@ metadata:
     app.kubernetes.io/name: clusterrolebinding
     app.kubernetes.io/instance: manager-rolebinding
     app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: cloudflare-kubernetes-gateway
-    app.kubernetes.io/part-of: cloudflare-kubernetes-gateway
-    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: cloudflare-gateway
+    app.kubernetes.io/part-of: cloudflare-gateway
+    app.kubernetes.io/managed-by: helm
   name: manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io

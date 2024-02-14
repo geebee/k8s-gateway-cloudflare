@@ -19,7 +19,7 @@ func InitCloudflareApi(ctx context.Context, c client.Client, gatewayClassName st
 		log.Error(err, "unable to fetch GatewayClass")
 		return nil, nil, err
 	}
-	if gatewayClass.Spec.ControllerName != "github.com/geebee/k8s-gateway-cloudflare" {
+	if gatewayClass.Spec.ControllerName != GatewayClassName {
 		return nil, nil, nil
 	}
 

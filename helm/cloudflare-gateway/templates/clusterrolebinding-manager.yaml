@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: {{ include "cloudflare-gateway.name" . }}
+    app.kubernetes.io/instance: manager-rolebinding
+    app.kubernetes.io/managed-by: helm
+    app.kubernetes.io/name: clusterrolebinding
+    app.kubernetes.io/part-of: {{ include "cloudflare-gateway.name" . }}
+  name: {{ .Values.rbac.manager.clusterRoleBindingName }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.rbac.manager.clusterRoleName }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "cloudflare-gateway.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+

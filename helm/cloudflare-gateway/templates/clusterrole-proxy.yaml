@@ -1,14 +1,15 @@
+{{- if .Values.monitoring.enabled -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: clusterrole
-    app.kubernetes.io/instance: proxy-role
     app.kubernetes.io/component: kube-rbac-proxy
-    app.kubernetes.io/created-by: cloudflare-gateway
-    app.kubernetes.io/part-of: cloudflare-gateway
+    app.kubernetes.io/created-by: {{ include "cloudflare-gateway.name" . }}
+    app.kubernetes.io/instance: proxy-role
     app.kubernetes.io/managed-by: helm
-  name: proxy-role
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/part-of: {{ include "cloudflare-gateway.name" . }}
+  name: {{ .Values.rbac.proxy.clusterRoleName }}
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -22,3 +23,4 @@ rules:
   - subjectaccessreviews
   verbs:
   - create
+{{- end }}

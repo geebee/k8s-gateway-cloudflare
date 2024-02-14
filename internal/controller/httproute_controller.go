@@ -83,7 +83,7 @@ func (r *HTTPRouteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 			return ctrl.Result{}, err
 		}
 
-		if gatewayClass.Spec.ControllerName != "github.com/geebee/k8s-gateway-cloudflare" {
+		if gatewayClass.Spec.ControllerName != GatewayClassName {
 			continue
 		}
 
@@ -207,7 +207,7 @@ func (r *HTTPRouteReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 			zone := cloudflare.ResourceIdentifier(zones.Result[0].ID)
 
 			content := fmt.Sprintf("%s.cfargotunnel.com", tunnel.ID)
-			comment := "Managed by github.com/geebee/k8s-gateway-cloudflare"
+			comment := fmt.Sprintf("Managed by %s", GatewayClassName)
 			records, info, _ := api.ListDNSRecords(ctx, zone, cloudflare.ListDNSRecordsParams{
 				Proxied: cloudflare.BoolPtr(true),
 				Type:    "CNAME",
