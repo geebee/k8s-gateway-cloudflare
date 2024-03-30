@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  cloudflare-gateway:
+  - apiVersion: v2
+    appVersion: v0.0.1
+    created: "2024-03-30T13:34:53.640671-04:00"
+    description: A Helm chart for a Kubernetes Gateway API implementation (v1.0.0)
+      using Cloudflare(d) tunnels
+    digest: 5e1f26a94e21ed3e9800531af5ce706068ab16d8053dd329223d4fb1756a5f3f
+    name: cloudflare-gateway
+    type: application
+    urls:
+    - https://geebee.github.io/k8s-gateway-cloudflare/cloudflare-gateway-0.0.1.tgz
+    version: 0.0.1
+generated: "2024-03-30T13:34:53.638766-04:00"
