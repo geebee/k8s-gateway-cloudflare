@@ -5,8 +5,8 @@
 domain: networking.k8s.io
 layout:
 - go.kubebuilder.io/v4
-projectName: cloudflare-kubernetes-gateway
-repo: github.com/pl4nty/cloudflare-kubernetes-gateway
+projectName: k8s-gateway-cloudflare
+repo: github.com/geebee/k8s-gateway-cloudflare
 resources:
 - controller: true
   domain: networking.k8s.io
